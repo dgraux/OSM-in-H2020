@@ -12,7 +12,7 @@ of OpenStreetMap within the publicly funded H2020 European
 projects. To do so, this project systematically reviews **all** the
 H2020 publicly available deliverables in order to check if they
 involve OpenStreetMap or other cartographic services such as Google
-Maps, Bing Maps or Baidu Maps. This high-level observations allow to
+Maps, Bing Maps or Baidu Maps. These high-level observations allow to
 have an idea of how H2020 projects rely on the OSM initiative to
 achieve their purposes.
 
