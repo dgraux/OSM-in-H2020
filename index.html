@@ -48,17 +48,17 @@
 
 	/* Middle column */
 	.column.middle {
-	    width: 35%;
+	    width: 27%;
 	}
 
 	/* Left column */
 	.column.left {
-	    width: 30%;
+	    width: 46%;
 	}
 
 	/* Right column */
 	.column.right {
-	    width: 35%;
+	    width: 27%;
 	}
 
 	/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
@@ -135,6 +135,7 @@
 	    color: black;
 	}
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   </head>
 
 
@@ -153,44 +154,173 @@
 	<h2 class="page-header">Description</h2>
 	<h3 class="page-header">Context</h3>
 	<p>
-	  
+	  The overall goal of this project is to have a look at the
+	  involvement of OpenStreetMap within the publicly funded
+	  H2020 European projects. To do so, this project
+	  systematically reviews all the H2020 publicly available
+	  deliverables in order to check if they involve OpenStreetMap
+	  or other cartographic services such as Google Maps, Bing
+	  Maps or Baidu Maps. This high-level observations allow to
+	  have an idea of how H2020 projects rely on the OSM
+	  initiative to achieve their purposes.
 	</p>
-
-	<h3 class="page-header">Methodology</h3>
+	<h3 class="page-header">H2020 Philosophy and Methodology</h3>
 	<p>
-
+	  Since 1984, the European Commission has been supporting
+	  research through various successive programmes. Recently,
+	  from 2014 to 2020, the EU invested approximately 80 billion
+	  euros into the eighth programme
+	  named <a href="https://ec.europa.eu/programmes/horizon2020/">Horizon
+	  2020</a>. Among various focuses such as the excellence of
+	  science or industrial secondments, H2020 emphasised on
+	  supporting an open access policy for all the research
+	  results. Moreover, H2020 projects were strongly encouraged
+	  to use open source software and tools.  Practically, all the
+	  research domains were eligible to be supported by the H2020
+	  programme, and therefore, the scopes of the projects vary
+	  from e.g. computer science, to philology passing by
+	  agriculture... Technically, as these projects are almost
+	  always involving several partners located in several
+	  European member states joining forces from multiple
+	  institutions, there is often a need to deal with data coming
+	  from different places. And, more generally, geo-data are
+	  often involved to tag information which may be research
+	  data, meeting localisation, partner addresses, etc. In such
+	  a context where open source tools are recommended by the
+	  European Commission, we analyse the presence of
+	  OpenStreetMap in H2020 projects. In addition, we also review
+	  the presence of other geographic services such as Google,
+	  Bing and Baidu maps, in order to better understand how
+	  researchers tend to choose one over the other.
+	  <br>
+	  In order to obtain the deliverables together with projects’
+	  information, we combined two European sources of information
+	  to gather all the facets we wanted to
+	  cover: <a href="https://cordis.europa.eu/projects/en">CORDIS</a>
+	  and <a href="https://data.europa.eu/en">Data Europa</a>. In
+	  particular, we extracted from CORDIS various high-level
+	  information about the projects themselves: from their names
+	  and acronyms to their durations passing by the specific
+	  European call-for-fundings they answered and obtained their
+	  money from. This latter category can be useful in order to
+	  have a finer-grained understanding of the domains which are
+	  prone to involved cartographic services. Next in order,
+	  Data.Europa was used to download the deliverables
+	  themselves, which required several days of computing
+	  resources.
 	</p>
 	<h3 class="page-header">Findings</h3>
 	<p>
-	  
+	  Empirically, we notice that 1) one order of magnitude
+	  separates the occurrences of each cartographic service and
+	  2) OpenStreetMap is from far the most represented solution
+	  and thereby the one on which public European researchers
+	  rely the most. Contextually, it is also interesting to note
+	  that not all the deliverables (1796 of them) mentioning
+	  “point of interest” refer to a cartographic service.
+	  <br>
+	  Moreover, we also analysed the co-occurence cases, where
+	  different cartographic providers are jointly mentioned
+	  within a single deliverable. Notably, there are not that
+	  many. This trend tend to suggest that once a group of
+	  researchers has chosen a cartographic solution, they tend to
+	  stick to it and do not try to compare them.
+	  <br>
+	  Furthermore, regarding OpenSeaMap, we counted 312 mentions
+	  from 27 deliverables, among which 20 ones mention both OSM
+	  and OpenSeaMap, showing how connected are the two
+	  initiatives.
 	</p>
       </div>
       
       <div class="column middle">
-	<h2 class="page-header">Deliverable statistics</h2>
-
-	<p>
-	</p>
-	
+	<h2 class="page-header">Deliverable per H2020 projects</h2>
+	<canvas id="pie-chart" width="800" height="450"></canvas>
+	<script>
+new Chart(document.getElementById("pie-chart"), {
+    type: 'pie',
+    data: {
+      labels: ["Projects without deliverables", "Projects with deliverables"],
+      datasets: [{
+        label: "Population (millions)",
+        backgroundColor: ["#8e5ea2","#3cba9f"],
+        data: [25157,8479]
+      }]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Repartition of projects having open deliverables, among 33636 projects.'
+      }
+    }
+});
+	</script>
       </div>
 
       <div class="column right">
-	<h2 class="page-header">Cartographic service comparison</h2>
+	<h2 class="page-header">Occurrences of cartographic services</h2>
+	<canvas id="bar-chart" width="800" height="450"></canvas>
+	<script>
+	  // Bar chart
+new Chart(document.getElementById("bar-chart"), {
+    type: 'bar',
+    data: {
+      labels: ["OpenStreetMap", "GoogleMaps", "BingMaps", "BaiduMaps", "OpenSeaMap"],
+      datasets: [
+        {
+          label: "Occurrences",
+          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+          data: [18595,2801,226,4,312]
+        }
+      ]
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Number of occurrences over all H2020 open deliverables (logarithmic y-axis).'
+	  },
+       scales: {
+                yAxes: [{
+                    type: 'logarithmic',
+                    ticks: {
+                        min: 0,
+                        max: 50000,
+                        callback: function(value, index, values) {//needed to change the scientific notation results from using logarithmic scale
+                            return Number(value.toString());//pass tick values as a string into Number function
+                        }
+                    },
+                    afterBuildTicks: function(pckBarChart) {    
+                        pckBarChart.ticks = [];
+                        pckBarChart.ticks.push(0);
+	                pckBarChart.ticks.push(10);
+                        pckBarChart.ticks.push(100);
+                        pckBarChart.ticks.push(1000);
+                        pckBarChart.ticks.push(10000);
+                        pckBarChart.ticks.push(50000);
+                      }
+                }]
+            }	  
+    }
+});
+	</script>
+
+
+
       </div>
     </div>
     
     <br/>
-    <br/>
 
     <div class="row">
-      <div style="float: left; width: 10%;">
+      <div style="float: left; width: 15%;">
         <h3 class="page-header">Contacts</h3>
 	<ul>
 	  <li><a href="https://dgraux.github.io/">Damien Graux</a></li>
 	  <li><a href="https://tyrex.inria.fr/people/thibaud.michel/index.html">Thibaud Michel</a></li>
 	</ul>
       </div>
-      <div style="float: left; width: 20%;">
+      <div style="float: left; width: 31%;">
 	<h3 class="page-header">Affiliations</h3>
 	<a href="https://inria.fr/en"><img src="inria.png" alt="Inria's logo" height="70px"></a>
 	<a href="https://getwemap.com/"><img src="wemap.png" alt="Wemap's logo" height="70px"></a>
