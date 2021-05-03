@@ -6,6 +6,8 @@
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="utf-8" http-equiv="encoding">
 
+    <script src="./Chart.min.js"></script>
+    
     <style>
 	body {
 	    margin: 20px 50px;
@@ -135,7 +137,6 @@
 	    color: black;
 	}
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   </head>
 
 
@@ -231,6 +232,22 @@
 	  and OpenSeaMap, showing how connected are the two
 	  initiatives.
 	</p>
+	
+	<div class="row">
+	  <div style="float: left; width: 40%;">
+            <h3 class="page-header">Contacts</h3>
+	    <ul>
+	      <li><a href="https://dgraux.github.io/">Damien Graux</a></li>
+	      <li><a href="https://tyrex.inria.fr/people/thibaud.michel/index.html">Thibaud Michel</a></li>
+	    </ul>
+	  </div>
+	  <div style="float: left; width: 60%;">
+	    <h3 class="page-header">Affiliations</h3>
+	    <a href="https://inria.fr/en"><img src="inria.png" alt="Inria's logo" height="70px"></a>
+	    <a href="https://getwemap.com/"><img src="wemap.png" alt="Wemap's logo" height="70px"></a>
+	  </div>
+	</div>
+	
       </div>
       
       <div class="column middle">
@@ -242,7 +259,7 @@ new Chart(document.getElementById("pie-chart"), {
     data: {
       labels: ["Projects without deliverables", "Projects with deliverables"],
       datasets: [{
-        label: "Population (millions)",
+        label: "Number of deliverables",
         backgroundColor: ["#8e5ea2","#3cba9f"],
         data: [25157,8479]
       }]
@@ -251,10 +268,82 @@ new Chart(document.getElementById("pie-chart"), {
       title: {
         display: true,
         text: 'Repartition of projects having open deliverables, among 33636 projects.'
-      }
+        },
+	  animation: {
+            duration: 2500,
+        },
     }
 });
 	</script>
+
+	<h2 class="page-header">The case of OpenSeaMap</h2>
+	<canvas id="pie-chart-openseamap" width="800" height="450"></canvas>
+	<script>
+new Chart(document.getElementById("pie-chart-openseamap"), {
+    type: 'pie',
+    data: {
+      labels: ["OpenSeaMap only", "OpenSeaMap & OpenStreetMap"],
+      datasets: [{
+        label: "Number of deliverables",
+        backgroundColor: ["#c45850","#3cba9f"],
+        data: [7,20]
+      }]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Proportion of deliverables having only OpenSeaMap.'
+        },
+	  animation: {
+            duration: 2500,
+        },
+    }
+});
+	</script>
+
+	<h2 class="page-header">Speaking of <i>Point of interest</i></h2>
+	<canvas id="pie-chart-poi" width="800" height="650"></canvas>
+	<script>
+var seriesData = [1796,204,139,4,81,15,1];
+var total = seriesData.reduce((a, v) => a + v);
+var inPercent = seriesData.map(v => Math.max(v / total * 100, 1));
+var labelsData = ["POI only", "POI+OSM", "POI+GMaps", "POI+BingMaps", "POI+OSM+GMaps","POI+OSM+GMaps+BingMaps","POI+OSM+OpenSeaMap"];
+
+new Chart(document.getElementById("pie-chart-poi"), {
+    type: 'pie',
+    data: {
+      labels: labelsData, // ["POI only", "POI+OSM", "POI+GMaps", "POI+BingMaps", "POI+OSM+GMaps","POI+OSM+GMaps+BingMaps","POI+OSM+OpenSeaMap"],
+      datasets: [{
+        label: "Number of deliverables",
+        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#a65628","#ff7f00"],
+        data: inPercent // data: [1796,204,139,4,81,15,1]
+      }]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Among 2240 deliverables mentioning POI,'
+        },
+	  animation: {
+            duration: 2500,
+},
+    tooltips: {
+      enabled: true,
+      mode: 'nearest',
+      callbacks: {
+        label: function(tooltipItem, data) {
+          var value = seriesData[tooltipItem.index];
+          var label = labelsData[tooltipItem.index];
+          return `${label}: ${value}`;
+        }
+      }
+    }
+    }
+});
+	</script>
+
+
+	
       </div>
 
       <div class="column right">
@@ -265,7 +354,7 @@ new Chart(document.getElementById("pie-chart"), {
 new Chart(document.getElementById("bar-chart"), {
     type: 'bar',
     data: {
-      labels: ["OpenStreetMap", "GoogleMaps", "BingMaps", "BaiduMaps", "OpenSeaMap"],
+      labels: ["OSM", "GMaps", "BingMaps", "BaiduMaps", "OpenSeaMap"],
       datasets: [
         {
           label: "Occurrences",
@@ -275,7 +364,10 @@ new Chart(document.getElementById("bar-chart"), {
       ]
     },
     options: {
-      legend: { display: false },
+	  legend: { display: false },
+	  	  animation: {
+            duration: 2500,
+        },
       title: {
         display: true,
         text: 'Number of occurrences over all H2020 open deliverables (logarithmic y-axis).'
@@ -305,27 +397,95 @@ new Chart(document.getElementById("bar-chart"), {
 });
 	</script>
 
+	<h2 class="page-header">Co-Occurrences within one deliverable</h2>
+	<canvas id="bar-chart2" width="800" height="450"></canvas>
+	<script>
+	  // Bar chart
+new Chart(document.getElementById("bar-chart2"), {
+    type: 'bar',
+    data: {
+      labels: [["OSM","GMaps"], ["OSM","BingMaps"], ["OSM, GMaps","BingMaps"], ["At least one","OSM mention"], ["Any kind","of mention"]],
+      datasets: [
+        {
+          label: "Occurrences",
+          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+          data: [291,59,39,1840,2790]
+        }
+      ]
+    },
+    options: {
+	  legend: { display: false },
+	  	  animation: {
+            duration: 2500,
+        },
+      title: {
+        display: true,
+        text: 'Number of deliverables (among 92612) having mentions of:'
+	  },
+       scales: {
+                yAxes: [{
+                    type: 'logarithmic',
+                    ticks: {
+                        min: 0,
+                        max: 5000,
+                        callback: function(value, index, values) {//needed to change the scientific notation results from using logarithmic scale
+                            return Number(value.toString());//pass tick values as a string into Number function
+                        }
+                    },
+                    afterBuildTicks: function(pckBarChart) {    
+                        pckBarChart.ticks = [];
+                        pckBarChart.ticks.push(0);
+	                pckBarChart.ticks.push(100);
+                        pckBarChart.ticks.push(1000);
+	                pckBarChart.ticks.push(5000);
+                      }
+                }]
+            }	  
+    }
+});
+	</script>
 
 
+	<h2 class="page-header">Top 5 projects mentioning OSM the most</h2>
+	<table id="t01">
+	  <col width="10%">
+	  <col width="75%">
+	  <col width="15%">
+	  <tr>
+	    <th>Acronym</th>
+	    <th>Name</th>
+	    <th>OSM Mentions</th>
+	  </tr>
+	  <tr>
+	    <td>5GINFIRE</td>
+	    <td>Evolving FIRE into a 5G-Oriented Experimental Playground for Vertical industries</td>
+	    <td>1532</td>
+	  </tr>
+	  <tr>
+	    <td>NextBase</td>
+	    <td>Next-generation interdigitated back-contacted silicon heterojunction solar cells and modules by design and process innovations</td>
+	    <td>1495</td>
+	  </tr>
+	  <tr>
+	    <td>5G-MEDIA</td>
+	    <td>Programmable edge-to-cloud virtualization fabric for the 5G Media industry</td>
+	    <td>1070</td>
+	  </tr>
+	  <tr>
+	    <td>TRANSPIRE</td>
+	    <td>Terahertz RAdio communication using high ANistropy SPIn torque REsonators</td>
+	    <td>600</td>
+	  </tr>
+	  <tr>
+	    <td>CHEOPS</td>
+	    <td>Production technology to achieve low Cost and Highly Efficient phOtovoltaic Perovskite Solar cells</td>
+	    <td>541</td>
+	  </tr>
+	</table>
+	
       </div>
     </div>
-    
-    <br/>
 
-    <div class="row">
-      <div style="float: left; width: 15%;">
-        <h3 class="page-header">Contacts</h3>
-	<ul>
-	  <li><a href="https://dgraux.github.io/">Damien Graux</a></li>
-	  <li><a href="https://tyrex.inria.fr/people/thibaud.michel/index.html">Thibaud Michel</a></li>
-	</ul>
-      </div>
-      <div style="float: left; width: 31%;">
-	<h3 class="page-header">Affiliations</h3>
-	<a href="https://inria.fr/en"><img src="inria.png" alt="Inria's logo" height="70px"></a>
-	<a href="https://getwemap.com/"><img src="wemap.png" alt="Wemap's logo" height="70px"></a>
-      </div>
-    </div>
       
     <footer>
       <hr/>
