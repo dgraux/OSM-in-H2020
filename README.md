@@ -103,6 +103,11 @@ Computed on: Sat  1 May 10:03:57 IST 2021
 -----------------------------------------------------
 ```
 
+License
+-------
+
+Apache License version 2.0, see [LICENSE](./LICENSE) for more details.
+
 Contact
 -------
 
